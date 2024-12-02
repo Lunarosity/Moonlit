@@ -46,7 +46,7 @@ NavigationKey := "\"
 
 ;     Webhook SETTINGS     ====================================================================================================;
 
-WebhookURL := "https://discord.com/api/webhooks/1310841391399702558/hAtNoWIlGSW2JNphlA2-Aj2UU1nV7YheFl7poQkxU78DENtbt8HJCHkkOkHgisnud9R0"
+WebhookURL := ""
 ResourcesFilePath := A_ScriptDir "\Moonlit_Resources\Screenshots"
 ImageFile := ResourcesFilePath "\MoonlitScreenshot.png"
 
