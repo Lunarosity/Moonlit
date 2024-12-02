@@ -1,0 +1,119 @@
+﻿;     GENERAL SETTINGS     ====================================================================================================;
+
+; Set to true to automatically lower graphics to 1
+AutoLowerGraphics := false
+AutoGraphicsDelay := 50
+
+; Set to true to automatically zoom in the camera
+AutoZoomInCamera := false
+AutoZoomDelay := 50
+
+; Set to true to check for camera mode and enable it
+AutoEnableCameraMode := false
+AutoCameraDelay := 50
+
+; Set to true to automatically look down
+AutoLookDownCamera := false
+AutoLookDelay := 200
+
+; Set to true to automatically blur the camera
+AutoBlurCamera := false
+AutoBlurDelay := 50
+
+; How long to wait after fishing before restarting
+RestartDelay := 1200
+
+; How long to hold the cast for before releasing
+HoldRodCastDuration := 200
+
+; How long to wait for the bobber to land in water
+WaitForBobberDelay := 1200
+
+; Set this to your navigation key, IMPORTANT
+NavigationKey := "\"
+
+;     Webhook SETTINGS     ====================================================================================================;
+
+; Your webhook link, leave blank if no webhook
+WebhookURL := ""
+
+; Change the screenshot folder name (do not modify Moonlit_Resources)
+ResourcesFilePath := A_ScriptDir "\Moonlit_Resources\Screenshots" 
+
+; Change the screenshot file name (do not remove .png)
+ImageFile := ResourcesFilePath "\MoonlitScreenshot.png" 
+
+;     SHAKE SETTINGS     ====================================================================================================;
+
+; Set to true to auto use shakes, false to not (Best disabled while using instant or fast catching rods)
+; While enabled, Camera Mode does not have to be enabled!
+AutoShake := false
+
+; Change to "Navigation" or "Click"
+ShakeMode := "Navigation"
+
+; Color range to scan for fish bar
+FishBarColorTolerance := 0
+
+; Seconds for click shake to be considered failed
+ClickShakeFailsafe := 5
+; Color range to scan for "shake" text
+ClickShakeColorTolerance := 3
+; Delay between the second click for shaking in milliseconds
+ClickShakeSecondClickTime := 10
+; Delay between each scan in miliseconds
+ClickScanDelay := 1
+; How many scans before clicking regardless of repeats
+RepeatBypassCounter := 10
+
+; Seconds for navigation shake to be considered failed
+NavigationShakeFailsafe := 5
+; Delay between each "S+Enter" in miliseconds
+NavigationSpamDelay := 0.3
+
+;     MINIGAME SETTINGS     ====================================================================================================;
+
+; Configurable Bar Size (manual override or auto-detect)
+ManualBarSize := 0
+; Seconds for calculation to be considered failed
+BarCalculationFailsafe := 10
+; Color range to scan for initial white bar
+BarSizeCalculationColorTolerance := 15
+
+; Color range to scan for minigame white bar
+WhiteBarColorTolerance := 0
+; Color range to scan for minigame arrow
+ArrowColorTolerance := 0
+
+; Amount of clicks per action cycle
+CorrectZoneStabilizerLoop := 12
+WrongZoneStabilizerLoop := 2
+
+; Ratio for bar side maximum hold (1 = max bar|0.5 = half bar)
+SideBarRatio := 0.7
+; Multiplier for how long to wait at the sides to prevent bounce
+SideBarWaitMultiplier := 5
+
+; Strength for moving right in correct zone
+StableRightMultiplier := 1.45
+; Counter strafe after moving right in correct zone
+StableRightDivision := 1.4
+; Strength for moving left in correct zone
+StableLeftMultiplier := 1.45
+; Counter strafe after moving left in correct zone
+StableLeftDivision := 1.3
+
+; Strength for moving right when in wrong zone
+UnstableRightMultiplier := 2.2
+; Counter strafe after moving right in wrong zone
+UnstableRightDivision := 1.4
+; Strength for moving left when in wrong zone
+UnstableLeftMultiplier := 2.2
+; Counter strafe after moving left in wrong zone
+UnstableLeftDivision := 1.3
+
+; Strength for moving right after a shift in the middle
+RightAnkleBreakMultiplier := 1.1
+; Strength for moving left after a shift in the middle
+LeftAnkleBreakMultiplier := 0.7
+;====================================================================================================;
