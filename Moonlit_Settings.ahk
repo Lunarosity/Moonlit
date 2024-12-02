@@ -32,7 +32,15 @@ WaitForBobberDelay := 1200
 ; Set this to your navigation key, IMPORTANT
 NavigationKey := "\"
 
-;     Webhook SETTINGS     ====================================================================================================;
+;     AUTO-REFRESH SETTINGS     ====================================================================================================;
+
+; Milliseconds (base is 20 minutes)
+TimeUntilReload = 1200000
+
+; Seconds
+ReloadSaveTime := 3
+
+;     WEBHOOK SETTINGS     ====================================================================================================;
 
 ; Your webhook link, leave blank if no webhook
 WebhookURL := ""
