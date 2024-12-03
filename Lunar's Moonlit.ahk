@@ -1,4 +1,5 @@
 #include Moonlit_Resources\Gdip_All.ahk
+#include Moonlit_Settings.ahk
 
 #SingleInstance Force
 setkeydelay, -1
@@ -10,119 +11,12 @@ CoordMode, Tooltip, Relative
 CoordMode, Pixel, Relative
 CoordMode, Mouse, Relative
 
-;     GENERAL SETTINGS     ====================================================================================================;
+ResourcesFilePath := A_ScriptDir "\Moonlit_Resources"
 
-; Set to true to automatically lower graphics to 1
-AutoLowerGraphics := false
-AutoGraphicsDelay := 50
+;====================================================================================================;
 
-; Set to true to automatically zoom in the camera
-AutoZoomInCamera := false
-AutoZoomDelay := 50
+; Settings would be here lol
 
-; Set to true to check for camera mode and enable it
-AutoEnableCameraMode := false
-AutoCameraDelay := 50
-
-; Set to true to automatically look down
-AutoLookDownCamera := false
-AutoLookDelay := 200
-
-; Set to true to automatically blur the camera
-AutoBlurCamera := false
-AutoBlurDelay := 50
-
-; How long to wait after fishing before restarting
-RestartDelay := 1200
-
-; How long to hold the cast for before releasing
-HoldRodCastDuration := 200
-
-; How long to wait for the bobber to land in water
-WaitForBobberDelay := 1200
-
-; Set this to your navigation key, IMPORTANT
-NavigationKey := "\"
-
-;     Webhook SETTINGS     ====================================================================================================;
-
-WebhookURL := ""
-ResourcesFilePath := A_ScriptDir "\Moonlit_Resources\Screenshots"
-ImageFile := ResourcesFilePath "\MoonlitScreenshot.png"
-
-;     SHAKE SETTINGS     ====================================================================================================;
-
-; Set to true to auto use shakes, false to not (Best disabled while using instant or fast catching rods)
-; While enabled, Camera Mode does not have to be enabled!
-AutoShake := false
-
-; Change to "Navigation" or "Click"
-ShakeMode := "Navigation"
-
-; Color range to scan for fish bar
-FishBarColorTolerance := 0
-
-; Seconds for click shake to be considered failed
-ClickShakeFailsafe := 5
-; Color range to scan for "shake" text
-ClickShakeColorTolerance := 3
-; Delay between the second click for shaking in milliseconds
-ClickShakeSecondClickTime := 10
-; Delay between each scan in miliseconds
-ClickScanDelay := 1
-; How many scans before clicking regardless of repeats
-RepeatBypassCounter := 10
-
-; Seconds for navigation shake to be considered failed
-NavigationShakeFailsafe := 5
-; Delay between each "S+Enter" in miliseconds
-NavigationSpamDelay := 0.3
-
-;     MINIGAME SETTINGS     ====================================================================================================;
-
-; Configurable Bar Size (manual override or auto-detect)
-ManualBarSize := 0
-; Seconds for calculation to be considered failed
-BarCalculationFailsafe := 10
-; Color range to scan for initial white bar
-BarSizeCalculationColorTolerance := 15
-
-; Color range to scan for minigame white bar
-WhiteBarColorTolerance := 0
-; Color range to scan for minigame arrow
-ArrowColorTolerance := 0
-
-; Amount of clicks per action cycle
-CorrectZoneStabilizerLoop := 12
-WrongZoneStabilizerLoop := 2
-
-; Ratio for bar side maximum hold (1 = max bar|0.5 = half bar)
-SideBarRatio := 0.7
-; Multiplier for how long to wait at the sides to prevent bounce
-SideBarWaitMultiplier := 5
-
-; Strength for moving right in correct zone
-StableRightMultiplier := 1.45
-; Counter strafe after moving right in correct zone
-StableRightDivision := 1.4
-; Strength for moving left in correct zone
-StableLeftMultiplier := 1.45
-; Counter strafe after moving left in correct zone
-StableLeftDivision := 1.3
-
-; Strength for moving right when in wrong zone
-UnstableRightMultiplier := 2.2
-; Counter strafe after moving right in wrong zone
-UnstableRightDivision := 1.4
-; Strength for moving left when in wrong zone
-UnstableLeftMultiplier := 2.2
-; Counter strafe after moving left in wrong zone
-UnstableLeftDivision := 1.3
-
-; Strength for moving right after a shift in the middle
-RightAnkleBreakMultiplier := 1.1
-; Strength for moving left after a shift in the middle
-LeftAnkleBreakMultiplier := 0.7
 ;====================================================================================================;
 
 if (AutoLowerGraphics != true and AutoLowerGraphics != false)
@@ -185,6 +79,8 @@ if !pToken := Gdip_Startup()
     MsgBox, Failed to initialize GDI+.
     return
 }
+
+iniFilePath := ResourcesFilePath "\Total_Runtime.ini"
 	
 ;====================================================================================================;
 
@@ -245,7 +141,7 @@ Tooltip18 := (WindowHeight/2)+(20*8)
 Tooltip19 := (WindowHeight/2)+(20*9)
 Tooltip20 := (WindowHeight/2)+(20*10)
 
-tooltip, Moonlit v1.52 by Lunarosity`nOriginal macro by AsphaltCake, %TooltipX%, %Tooltip1%, 1
+tooltip, Moonlit v1.6 by Lunarosity`nOriginal macro by AsphaltCake, %TooltipX%, %Tooltip1%, 1
 
 tooltip, Thanks to holyservice and caughtbyafed both on discord, %TooltipX%, %Tooltip4%, 4
 tooltip, Thanks to mani for testing the macro, %TooltipX%, %Tooltip5%, 5
@@ -274,22 +170,13 @@ else if (AutoShake != true or false)
 	
 ;====================================================================================================;
 
-runtime:
-runtimeS++
-if (runtimeS >= 60)
-	{
-	runtimeS := 0
-	runtimeM++
-	}
-if (runtimeM >= 60)
-	{
-	runtimeM := 0
-	runtimeH++
-	}
+
+
+;====================================================================================================;
 
 if WinActive("Roblox")
 	{
-	tooltip, Runtime: %runtimeH%h %runtimeM%m %runtimeS%s, %TooltipX%, %Tooltip20%, 20
+	tooltip, Session Runtime: %runtimeH%h %runtimeM%m %runtimeS%s`nTotal Runtime: %TotalRuntimeH%h %TotalRuntimeM%m %TotalRuntimeS%s, %TooltipX%, %Tooltip20%, 20
 	}
 else
 	{
@@ -304,10 +191,12 @@ $o:: reload
 $m:: exitapp
 $p::
 
+
 ;====================================================================================================;
 
+
+
 gosub, Calculations
-settimer, runtime, 1000
 
 tooltip, Press "I" to Pause`nPress "O" to Reload`nPress "M" to Exit, %TooltipX%, %Tooltip3%, 3
 
@@ -954,7 +843,10 @@ else {
 	tooltip, , , , 18
 	tooltip, , , , 19
 	sleep %RestartDelay%
-	goto Screenshotsys
+	if (WebhookURL != "") {
+		goto Screenshotsys
+	}
+	goto RestartMacro
 }
 
 Screenshotsys:
@@ -989,8 +881,6 @@ if (fileSize = 0) {
     Gdip_Shutdown(pToken)
     return
 }
-
-tooltip, Screenshot saved successfully at %ImageFile%, %TooltipX%, %Tooltip8%, 8
 
 Gdip_Shutdown(pToken)
 
