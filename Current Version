@@ -1,0 +1,13 @@
+CurrentVer := v1.61
+
+/*
+Developer comments:
+Initial release of v1.0 was an utter failure, as some people had great tracking and others had the worst in history
+
+v1.6 has got to be the worst version I've ever worked with. I've had so many issues like the webhook system only functioning on the first screenshot and failing the 2nd. and I scrapped the whole auto-refresh idea (for now)
+Auto-refresh might come in later updates like 1.7 or 1.8
+
+https://tenor.com/view/rh2-season-3-gif-2216751972410442902
+
+I'm having trouble deciding if I want to release Moonlit as v1 or v2 😭
+*/
