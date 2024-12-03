@@ -1,4 +1,4 @@
-﻿;     GENERAL SETTINGS     ====================================================================================================;
+;     GENERAL SETTINGS     ====================================================================================================;
 
 ; Set to true to automatically lower graphics to 1
 AutoLowerGraphics := false
@@ -46,10 +46,10 @@ ReloadSaveTime := 3
 WebhookURL := ""
 
 ; Change the screenshot folder name (do not modify Moonlit_Resources)
-ResourcesFilePath := A_ScriptDir "\Moonlit_Resources\Screenshots" 
+ScreenshotFilePath := A_ScriptDir "\Moonlit_Resources\Screenshots" 
 
 ; Change the screenshot file name (do not remove .png)
-ImageFile := ResourcesFilePath "\MoonlitScreenshot.png" 
+ImageFile := ScreenshotFilePath "\MoonlitScreenshot.png" 
 
 ;     SHAKE SETTINGS     ====================================================================================================;
 
