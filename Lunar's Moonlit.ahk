@@ -12,6 +12,8 @@ CoordMode, Pixel, Relative
 CoordMode, Mouse, Relative
 
 ResourcesFilePath := A_ScriptDir "\Moonlit_Resources"
+MainRuntimeHandler := ResourcesFilePath "\Total_Runtime.ini"
+GetVer := ResourcesFilePath "\CurrentVer.ini"
 
 ;====================================================================================================;
 
@@ -79,8 +81,6 @@ if !pToken := Gdip_Startup()
     MsgBox, Failed to initialize GDI+.
     return
 }
-
-iniFilePath := ResourcesFilePath "\Total_Runtime.ini"
 	
 ;====================================================================================================;
 
@@ -141,11 +141,14 @@ Tooltip18 := (WindowHeight/2)+(20*8)
 Tooltip19 := (WindowHeight/2)+(20*9)
 Tooltip20 := (WindowHeight/2)+(20*10)
 
-tooltip, Moonlit v1.6 by Lunarosity`nOriginal macro by AsphaltCake, %TooltipX%, %Tooltip1%, 1
+IniRead, DownloadedVer, %GetVer%, Version, Current, 0
+
+Tooltip, Moonlit %DownloadedVer% by Lunarosity`nOriginal macro by AsphaltCake, %TooltipX%, %Tooltip1%, 1
 
 tooltip, Thanks to holyservice and caughtbyafed both on discord, %TooltipX%, %Tooltip4%, 4
-tooltip, Thanks to mani for testing the macro, %TooltipX%, %Tooltip5%, 5
+tooltip, Thanks to mani and solary for testing the macro, %TooltipX%, %Tooltip5%, 5
 tooltip, This was primarily inspired by Universal Hu6 and Horror V11, %TooltipX%, %Tooltip6%, 6
+; Hello there, pls don't remove these credits 🙏
 
 tooltip, Press "P" to Start`nPress "O" to Reload`nPress "M" to Exit, %TooltipX%, %Tooltip8%, 8
 
@@ -170,7 +173,39 @@ else if (AutoShake != true or false)
 	
 ;====================================================================================================;
 
+runtimeS := 0
+runtimeM := 0
+runtimeH := 0
 
+UpdateRuntime:
+    runtimeS++
+    if (runtimeS >= 60) {
+        runtimeS := 0
+        runtimeM++
+    }
+    if (runtimeM >= 60) {
+        runtimeM := 0
+        runtimeH++
+    }
+
+    IniRead, OriginruntimeS, %RuntimeHandler%, Runtime, Seconds, 0
+    IniRead, OriginruntimeM, %RuntimeHandler%, Runtime, Minutes, 0
+    IniRead, OriginruntimeH, %RuntimeHandler%, Runtime, Hours, 0
+
+    TotalRuntimeS := runtimeS + OriginruntimeS
+    TotalRuntimeM := runtimeM + OriginruntimeM
+    TotalRuntimeH := runtimeH + OriginruntimeH
+
+    if (TotalRuntimeS >= 60) {
+        TotalRuntimeS -= 60
+        TotalRuntimeM++
+    }
+    if (TotalRuntimeM >= 60) {
+        TotalRuntimeM -= 60
+        TotalRuntimeH++
+    }
+	tooltip, Session Runtime: %runtimeH%h %runtimeM%m %runtimeS%s`nTotal Runtime: %TotalRuntimeH%h %TotalRuntimeM%m %TotalRuntimeS%s, %TooltipX%, %Tooltip20%, 20
+return
 
 ;====================================================================================================;
 
@@ -187,16 +222,28 @@ return
 ;====================================================================================================;
 
 $i:: pause
-$o:: reload
+$o:: 
+
+IniRead, OriginruntimeS, %RuntimeHandler%, Runtime, Seconds, 0
+IniRead, OriginruntimeM, %RuntimeHandler%, Runtime, Minutes, 0
+IniRead, OriginruntimeH, %RuntimeHandler%, Runtime, Hours, 0
+TotalRuntimeS := runtimeS + OriginruntimeS
+TotalRuntimeM := runtimeM + OriginruntimeM
+TotalRuntimeH := runtimeH + OriginruntimeH
+IniWrite, %TotalRuntimeS%, %RuntimeHandler%, Runtime, Seconds
+IniWrite, %TotalRuntimeM%, %RuntimeHandler%, Runtime, Minutes
+IniWrite, %TotalRuntimeH%, %RuntimeHandler%, Runtime, Hours
+
+Reload
+
+
 $m:: exitapp
 $p::
 
-
 ;====================================================================================================;
 
-
-
 gosub, Calculations
+SetTimer, UpdateRuntime, 1000
 
 tooltip, Press "I" to Pause`nPress "O" to Reload`nPress "M" to Exit, %TooltipX%, %Tooltip3%, 3
 
@@ -615,9 +662,9 @@ if (ErrorLevel == 0)
             	tooltip, Bounce Mitigation: %BounceMitigationLeft% | Left, %TooltipX%, %Tooltip16%, 15
             	MaxLeftToggle := true
 				send {lbutton up}
-            	sleep 1
+            	sleep 10
             	send {lbutton up}
-				if (Distance > 0) {
+				if (Distance > 0 and WhiteBarSize < 400) {
 					sleep BounceMitigationLeft / 2
 					send {lbutton down}
 					sleep Distance * ResolutionScaling * StableLeftMultiplier
@@ -649,9 +696,9 @@ if (ErrorLevel == 0)
             tooltip, Bounce Mitigation: %BounceMitigationRight% | Right, %TooltipX%, %Tooltip16%, 15
             MaxRightToggle := true
 			send {lbutton down}
-            sleep 1
+            sleep 10
             send {lbutton down}
-			if (Distance2 > 0) {
+			if (Distance2 > 0 and WhiteBarSize < 400) {
 				sleep BounceMitigationRight / 2
 				send {lbutton up}
 				sleep Distance2 * ResolutionScaling * StableRightMultiplier
@@ -829,9 +876,10 @@ if (ErrorLevel == 0)
     }
 	goto BarMinigame2
 }
-
 else {
     send {lbutton up}
+	send {rbutton up}
+	send {shift up}
 	tooltip, , , , 10	
 	tooltip, , , , 11
 	tooltip, , , , 12
@@ -895,11 +943,6 @@ HTTP.SetRequestHeader("Pragma", "no-cache")
 HTTP.SetRequestHeader("Cache-Control", "no-cache, no-store")
 HTTP.SetRequestHeader("If-Modified-Since", "Sat, 1 Jan 2000 00:00:00 GMT")
 HTTP.Send(PostData)
-HTTP.WaitForResponse()
-
-; CreateFormData() by tmplinshi, AHK Topic: https://autohotkey.com/boards/viewtopic.php?t=7647
-; Thanks to Coco: https://autohotkey.com/boards/viewtopic.php?p=41731#p41731
-; Modified version by SKAN, 09/May/2016
 
 CreateFormData(ByRef retData, ByRef retHeader, objParam) {
 	New CreateFormData(retData, retHeader, objParam)
