@@ -65,7 +65,7 @@ ClickShakeSecondClickTime := 10
 ; Delay between each scan in miliseconds
 ClickScanDelay := 1
 ; How many scans before clicking regardless of repeats
-RepeatBypassCounter := 10
+RepeatBypassCounter := 3
 
 ; Seconds for navigation shake to be considered failed
 NavigationShakeFailsafe := 5
