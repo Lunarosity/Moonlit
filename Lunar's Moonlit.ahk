@@ -146,7 +146,7 @@ IniRead, DownloadedVer, %GetVer%, Version, Current, 0
 Tooltip, Moonlit %DownloadedVer% by Lunarosity`nOriginal macro by AsphaltCake, %TooltipX%, %Tooltip1%, 1
 
 tooltip, Thanks to holyservice and caughtbyafed both on discord, %TooltipX%, %Tooltip4%, 4
-tooltip, Thanks to mani and solary for testing the macro, %TooltipX%, %Tooltip5%, 5
+tooltip, Thanks to mani and 1solary for testing the macro, %TooltipX%, %Tooltip5%, 5
 tooltip, This was primarily inspired by Universal Hu6 and Horror V11, %TooltipX%, %Tooltip6%, 6
 ; Hello there, pls don't remove these credits 🙏
 
@@ -218,6 +218,12 @@ else
 	exitapp
 	}
 return
+
+;====================================================================================================;
+
+MinimumFunc(v1, v2) {
+    return Max(v1, v2)
+}
 
 ;====================================================================================================;
 
@@ -547,10 +553,14 @@ else
 	{
 	NavigationCounter++
 	tooltip, Attempt Count: %NavigationCounter%, %TooltipX%, %Tooltip8%, 8
-	sleep 1
-	send {s}
-	sleep 1
-	send {enter}
+	
+		sleep 1
+		send {s}
+		loop, 2
+		{
+			sleep 1
+			send {enter}
+		}
 	goto NavigationShakeModeRedo
 	}
 
@@ -647,45 +657,38 @@ if (ErrorLevel == 0)
     tooltip, Distance: %Distance% | Left`nDistance: %Distance2% | Right, %TooltipX%, %Tooltip17%, 16
 
     if (FishX < MaxLeftBar) {
-		if (Distance < 0) {
-            Distance := 0
-        }
+		MinimumFunc(0, Distance)
         BounceMitigationLeft := Ceil(Distance * ResolutionScaling * StableLeftMultiplier)
         if (MaxLeftToggle == false)
         {
-			{
-            	tooltip, <, %MaxLeftBar%, %FishBarTooltipHeight%, 19
-            	tooltip, Direction: Max Left, %TooltipX%, %Tooltip10%, 10
-            	tooltip, Forward Delay: Infinite, %TooltipX%, %Tooltip11%, 11
-            	tooltip, Counter Delay: None, %TooltipX%, %Tooltip12%, 12
-            	tooltip, Ankle Delay: 0, %TooltipX%, %Tooltip13%, 13
-            	tooltip, Bounce Mitigation: %BounceMitigationLeft% | Left, %TooltipX%, %Tooltip16%, 15
-            	MaxLeftToggle := true
+            tooltip, <, %MaxLeftBar%, %FishBarTooltipHeight%, 19
+            tooltip, Direction: Max Left, %TooltipX%, %Tooltip10%, 10
+            tooltip, Forward Delay: Infinite, %TooltipX%, %Tooltip11%, 11
+            tooltip, Counter Delay: None, %TooltipX%, %Tooltip12%, 12
+            tooltip, Ankle Delay: 0, %TooltipX%, %Tooltip13%, 13
+            tooltip, Bounce Mitigation: %BounceMitigationLeft% | Left, %TooltipX%, %Tooltip16%, 15
+            MaxLeftToggle := true
+            sleep 10
+            send {lbutton up}
+			if (Distance > 0 and WhiteBarSize < 380) {
+				sleep BounceMitigationLeft / 2
+				send {lbutton down}
+				sleep Distance * ResolutionScaling * StableLeftMultiplier
+				if (FishX > MaxLeftBar) {
+					sleep (Distance * ResolutionScaling * StableLeftMultiplier) * 1.5
+					goto BarMinigame2
+				}
 				send {lbutton up}
-            	sleep 10
-            	send {lbutton up}
-				if (Distance > 0 and WhiteBarSize < 400) {
-					sleep BounceMitigationLeft / 2
-					send {lbutton down}
-					sleep Distance * ResolutionScaling * StableLeftMultiplier
-					if (FishX > MaxLeftBar) {
-						sleep (Distance * ResolutionScaling * StableLeftMultiplier) * 1.5
-						goto BarMinigame2
-					}
-					send {lbutton up}
-					}
-            	sleep %SideDelay%
-            	AnkleBreakDelay := 0
-            	SideDelay := 0
-            	tooltip, Side Delay: 0, %TooltipX%, %Tooltip14%, 14
-			}
+				}
+            sleep %SideDelay%
+            AnkleBreakDelay := 0
+            SideDelay := 0
+            tooltip, Side Delay: 0, %TooltipX%, %Tooltip14%, 14
         }
         goto BarMinigame2
     }
     else if (FishX > MaxRightBar) {
-		if (Distance2 < 0) {
-            Distance2 := 0
-        }
+		MinimumFunc(0, Distance2)
 		BounceMitigationRight := Ceil(Distance2 * ResolutionScaling * StableRightMultiplier)
         if (MaxRightToggle == false) {
             tooltip, >, %MaxRightBar%, %FishBarTooltipHeight%, 19
@@ -695,10 +698,10 @@ if (ErrorLevel == 0)
             tooltip, Ankle Delay: 0, %TooltipX%, %Tooltip13%, 13
             tooltip, Bounce Mitigation: %BounceMitigationRight% | Right, %TooltipX%, %Tooltip16%, 15
             MaxRightToggle := true
-			send {lbutton down}
+			send {lbutton up}
             sleep 10
             send {lbutton down}
-			if (Distance2 > 0 and WhiteBarSize < 400) {
+			if (Distance2 > 0 and WhiteBarSize < 380) {
 				sleep BounceMitigationRight / 2
 				send {lbutton up}
 				sleep Distance2 * ResolutionScaling * StableRightMultiplier
@@ -727,8 +730,11 @@ if (ErrorLevel == 0)
         {
             tooltip, <, %BarX%, %FishBarTooltipHeight%, 19
             tooltip, Direction: <, %TooltipX%, %Tooltip10%, 10
+
             Difference := Ceil((BarX - FishX) * ResolutionScaling * StableLeftMultiplier)
+			MinimumFunc(50, Difference)
             CounterDifference := Ceil(Difference / StableLeftDivision)
+
             tooltip, Forward Delay: %Difference%, %TooltipX%, %Tooltip11%, 11
             tooltip, Counter Delay: %CounterDifference%, %TooltipX%, %Tooltip12%, 12
 			send {lbutton up}
@@ -760,8 +766,11 @@ if (ErrorLevel == 0)
 		{
 			tooltip, >, %BarX%, %FishBarTooltipHeight%, 19
 			tooltip, Direction: >, %TooltipX%, %Tooltip10%, 10
+
 			Difference := Ceil((FishX-BarX)*ResolutionScaling*StableRightMultiplier)
+			MinimumFunc(50, Difference)
 			CounterDifference := Ceil(Difference/StableRightDivision)
+
 			tooltip, Forward Delay: %Difference%, %TooltipX%, %Tooltip11%, 11
 			tooltip, Counter Delay: %CounterDifference%, %TooltipX%, %Tooltip12%, 12
             send {lbutton down}
@@ -799,12 +808,15 @@ if (ErrorLevel == 0)
 			goto BarMinigame2
 			}
 		PixelSearch, ArrowX, , FishBarLeft, FishBarTop, FishBarRight, FishBarBottom, 0x878584, %ArrowColorTolerance%, Fast
-		if (ArrowX > FishX)
+		if (WhiteBarRight > FishX)
 		{
 			tooltip, <, %ArrowX%, %FishBarTooltipHeight%, 19
 			tooltip, Direction: <<<, %TooltipX%, %Tooltip10%, 10
+
 			Difference := Ceil(HalfBarSize*UnstableLeftMultiplier)
+			MinimumFunc(50, Difference)
 			CounterDifference := Ceil(Difference/UnstableLeftDivision)
+
 			tooltip, Forward Delay: %Difference%, %TooltipX%, %Tooltip11%, 11
 			tooltip, Counter Delay: %CounterDifference%, %TooltipX%, %Tooltip12%, 12
 			send {lbutton up}
@@ -836,12 +848,15 @@ if (ErrorLevel == 0)
 				}
 			DirectionalToggle := "Left"
 		}
-		else
+		else if (WhiteBarLeft < FishX)
 		{
 			tooltip, >, %ArrowX%, %FishBarTooltipHeight%, 19
 			tooltip, Direction: >>>, %TooltipX%, %Tooltip10%, 10
+
 			Difference := Ceil(HalfBarSize*UnstableRightMultiplier)
+			MinimumFunc(50, Difference)
 			CounterDifference := Ceil(Difference/UnstableRightDivision)
+
 			tooltip, Forward Delay: %Difference%, %TooltipX%, %Tooltip11%, 11
 			tooltip, Counter Delay: %CounterDifference%, %TooltipX%, %Tooltip12%, 12
 			send {lbutton down}
@@ -929,8 +944,6 @@ if (fileSize = 0) {
     Gdip_Shutdown(pToken)
     return
 }
-
-Gdip_Shutdown(pToken)
 
 objParam := {file: [ImageFile], content: test}
 CreateFormData(PostData, hdr_ContentType, objParam)
